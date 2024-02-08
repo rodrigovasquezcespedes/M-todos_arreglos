@@ -7,6 +7,7 @@ let tareas = [
 const listaTareas = document.getElementById("lista-tareas");
 const totalTareas = document.getElementById("total-tareas");
 const tareasCompletadas = document.getElementById("tareas-completadas");
+const boton = document.querySelector("#boton")
 
 function actualizarResumen() {
   totalTareas.textContent = tareas.length;
@@ -55,5 +56,6 @@ function cambiarCompletitud(id) {
   }
 }
 
-// Renderizado inicial
+// Renderizado inicial 
 renderizarTareas();
+boton.addEventListener('click',agregarTarea);
