@@ -1,61 +1,63 @@
-let tareas = [
-  { id: 1, descripcion: "Tarea 1", completada: false },
-  { id: 2, descripcion: "Tarea 2", completada: false },
-  { id: 3, descripcion: "Tarea 3", completada: false }
-];
+let tareas = [];
 
 const listaTareas = document.getElementById("lista-tareas");
 const totalTareas = document.getElementById("total-tareas");
 const tareasCompletadas = document.getElementById("tareas-completadas");
 const boton = document.querySelector("#boton")
+const entrada = document.querySelector("#entrada-tarea");
+
 
 function actualizarResumen() {
   totalTareas.textContent = tareas.length;
   tareasCompletadas.textContent = tareas.filter(tarea => tarea.completada).length;
 }
 
-function renderizarTareas() {
+function mostrarTarea() {
   listaTareas.innerHTML = "";
   tareas.forEach(tarea => {
-      const li = document.createElement("li");
-      li.classList.add("item-tarea");
-      if (tarea.completada) {
-          li.classList.add("completada");
-      }
-      li.innerHTML = `
+    const li = document.createElement("li");
+    li.classList.add("item-tarea");
+    if (tarea.completada) {
+      li.classList.add("completada");
+    }
+    li.innerHTML = `
+    
+          ${tarea.id}
+          &nbsp;&nbsp;&nbsp;&nbsp;
           ${tarea.descripcion}
-          <button onclick="cambiarCompletitud(${tarea.id})">Cambiar</button>
+          <button onclick="cambiarEstado(${tarea.id})">Cambiar</button>
+          &nbsp;
           <button onclick="eliminarTarea(${tarea.id})">Eliminar</button>
+        
       `;
-      listaTareas.appendChild(li);
+    listaTareas.appendChild(li);
   });
   actualizarResumen();
 }
 
 function agregarTarea() {
-  const entrada = document.getElementById("entrada-tarea");
   const descripcion = entrada.value.trim();
   if (descripcion !== "") {
-      const id = tareas.length + 1;
-      tareas.push({ id, descripcion, completada: false });
-      renderizarTareas();
-      entrada.value = "";
+    const id = tareas.length + 1;
+    tareas.push({ id, descripcion, completada: false });
+    mostrarTarea();
+    entrada.value = "";
   }
 }
 
 function eliminarTarea(id) {
   tareas = tareas.filter(tarea => tarea.id !== id);
-  renderizarTareas();
+  mostrarTarea();
 }
 
-function cambiarCompletitud(id) {
+function cambiarEstado(id) {
   const tarea = tareas.find(tarea => tarea.id === id);
   if (tarea) {
-      tarea.completada = !tarea.completada;
-      renderizarTareas();
+    tarea.completada = !tarea.completada;
+    mostrarTarea();
   }
 }
 
 // Renderizado inicial 
-renderizarTareas();
-boton.addEventListener('click',agregarTarea);
+mostrarTarea();
+boton.addEventListener('click', agregarTarea);

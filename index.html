@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Tareas</title>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
+
 <body>
     <div class="contenedor">
         <div class="tareas">
             <h2>Lista de Tareas</h2>
-           
+
             <input type="text" id="entrada-tarea" placeholder="Ingrese una nueva tarea">
-            <button  id="boton">Agregar Tarea</button>
-            <div id="resumen-tareas" >
+            <button id="boton">Agregar Tarea</button>
+            <div id="resumen-tareas">
                 Total tareas: <span id="total-tareas">0</span><br>
                 Tareas completadas: <span id="tareas-completadas">0</span>
             </div>
+            <div id="titulo">
+                <p>Id</p>
+                <p>Tareas</p>
+            </div>
             <ul id="lista-tareas">
-                <!-- Las tareas se agregarán dinámicamente aquí -->
+                <!--se agregan las tareas -->
             </ul>
         </div>
     </div>
     <script src="./assets/js/app.js"></script>
 </body>
+
 </html>
