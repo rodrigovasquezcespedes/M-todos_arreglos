@@ -1,34 +1,36 @@
+// Declaramos un array vacío para almacenar las tareas.
 let tareas = [];
 
+// Seleccionamos los elementos del DOM con los que vamos a interactuar.
 const entrada = document.querySelector("#entrada-tarea");
 const boton = document.querySelector("#boton");
 const totalTareas = document.querySelector("#total-tareas");
 const tareasCompletadas = document.querySelector("#tareas-completadas");
 const listaTareas = document.querySelector("#lista-tareas");
-const check = document.querySelector("#checkBox");
 
-
-                                                /* funcion de agregar datos */
+// Función para agregar una tarea al array de tareas.
 const agregarTarea = () => {
+  // Obtenemos el valor del input y eliminamos espacios en blanco al inicio y al final.
   const descripcion = entrada.value.trim();
-  if (descripcion !== "") {// si es distinto a vacio
-    const id = tareas.length + 1;// la cantidad de elementos mas 1
+  if (descripcion !== "") { // Verificamos que la descripción no esté vacía.
+    // Generamos un ID único para la tarea y la añadimos al array de tareas.
+    const id = tareas.length + 1;
     tareas.push({ id, descripcion, completada: false });
+    // Limpiamos el valor del input.
     entrada.value = ""
+    // Mostramos la tarea en la interfaz.
     mostrarTarea();
-    entrada.value = "";//limpia el input
   } else {
-    alert("Ingresar Datos");// si es vacio se activa el alerta 
+    alert("Ingresar Datos"); // Alerta si la descripción está vacía.
   }
 }
 
-
-                                                      /* mostrar datos */
+// Función para mostrar las tareas en la interfaz.
 const mostrarTarea = () => {
+  // Limpiamos el contenido anterior de la lista de tareas.
+  listaTareas.innerHTML = "";
 
-  listaTareas.innerHTML = ""; // Limpiar el contenido previo
-
-  // Crear la tabla y su encabezado
+  // Creamos la estructura de la tabla con su encabezado.
   listaTareas.innerHTML = `
     <table>
       <tr>
@@ -40,58 +42,65 @@ const mostrarTarea = () => {
     </table>
   `;
 
-  // Obtener la referencia de la tabla recién creada
+  // Obtenemos una referencia a la tabla recién creada.
   const tabla = listaTareas.querySelector('table');
 
-  // Iterar sobre cada tarea y agregarla a la tabla
+  // Iteramos sobre cada tarea y la añadimos a la tabla.
   for (let i = 0; i < tareas.length; i++) {
     const tarea = tareas[i];
-
-    // Agregar una fila para cada tarea
+    // Añadimos una fila para cada tarea.
     tabla.innerHTML += `
       <tr>
         <td>${tarea.id}</td>
         <td>${tarea.descripcion}</td>
-        <td><input type="checkbox" id="checkBox" onclick="actualizarResumen(${tarea.id})"></td>
+        <! --  esta línea crea un checkbox en una celda de una tabla HTML, cuyo estado inicial (marcado o desmarcado) depende del estado de completado de la tarea correspondiente en el array tareas. Además, cuando se cambia el estado del checkbox, se llama a la función actualizarEstado() para actualizar el estado de la tarea en el array tareas. -->
+        <td><input type="checkbox" id="checkBox-${tarea.id}" ${tarea.completada ? 'checked' : ''} onchange="actualizarEstado(${tarea.id}, this.checked)"></td>
         <td><a href="#" onclick="eliminarTarea(${tarea.id})"><i class="fa-regular fa-circle-xmark"></i></a></td>
       </tr>
     `;
   }
 
-  // Actualizar el resumen (si es necesario)
+  // Actualizamos el resumen de tareas.
   actualizarTarea();
 }
 
-
-
-                                                      /* Eliminar Tarea */
+// Función para eliminar una tarea.
 const eliminarTarea = (id) => {
-  // Encontrar el índice de la tarea con el id dado
+  // Encontramos el índice de la tarea con el ID proporcionado.
   const indice = tareas.findIndex(tarea => tarea.id === id);
-  
-  // Si se encuentra la tarea (el índice no es -1), se elimina del array
+  // Si se encuentra la tarea, se elimina del array.
   if (indice !== -1) {
     tareas.splice(indice, 1);
+    // Mostramos nuevamente las tareas actualizadas.
     mostrarTarea();
   } 
 }
 
-                                                      /* actualizar Datos */
-// const actualizarTarea= ()=> {
-//   totalTareas.innerHTML = tareas.length;
-//   tareasCompletadas.innerHTML = tareas.findIndex(tarea => tareasCompletada).length;
-// }
+// Función para actualizar el resumen de tareas.
 const actualizarTarea = () => {
-  // Actualizar el total de tareas
-  totalTareas.innerHTML = tareas.length;
+  // Actualizamos el total de tareas.
+  totalTareas.textContent = tareas.length;
 
-  // Contar las tareas completadas
+  // Contamos las tareas completadas.
   const tareasCompletadasCount = tareas.filter(tarea => tarea.completada).length;
   tareasCompletadas.textContent = tareasCompletadasCount;
 };
 
+// Función para actualizar el estado de completado de una tarea.
+const actualizarEstado = (id, completada) => {
+  // Encontramos la tarea en el array de tareas.
+  const tarea = tareas.find(tarea => tarea.id === id);
+  if (tarea) {
+    // Actualizamos el estado de completado de la tarea.
+    tarea.completada = completada;
+    // Mostramos las tareas actualizadas.
+    mostrarTarea();
+  }
+}
 
+// Escuchamos el evento 'click' en el botón y llamamos a la función agregarTarea.
 boton.addEventListener('click', agregarTarea);
-// Renderizado inicial 
+
+// Mostramos las tareas iniciales al cargar la página.
 mostrarTarea();
-actualizarTarea();
+
