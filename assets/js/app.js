@@ -1,36 +1,27 @@
-// Declaramos un array vacío para almacenar las tareas.
 let tareas = [];
 
-// Seleccionamos los elementos del DOM con los que vamos a interactuar.
 const entrada = document.querySelector("#entrada-tarea");
 const boton = document.querySelector("#boton");
 const totalTareas = document.querySelector("#total-tareas");
 const tareasCompletadas = document.querySelector("#tareas-completadas");
 const listaTareas = document.querySelector("#lista-tareas");
 
-// Función para agregar una tarea al array de tareas.
+// se crea una función para agregar una tarea.
 const agregarTarea = () => {
-  // Obtenemos el valor del input y eliminamos espacios en blanco al inicio y al final.
   const descripcion = entrada.value.trim();
-  if (descripcion !== "") { // Verificamos que la descripción no esté vacía.
-    // Generamos un ID único para la tarea y la añadimos al array de tareas.
+  if (descripcion !== "") {
     const id = tareas.length + 1;
     tareas.push({ id, descripcion, completada: false });
-    // Limpiamos el valor del input.
     entrada.value = ""
-    // Mostramos la tarea en la interfaz.
     mostrarTarea();
   } else {
-    alert("Ingresar Datos"); // Alerta si la descripción está vacía.
+    alert("Ingresar Datos");
   }
 }
 
-// Función para mostrar las tareas en la interfaz.
+// se crea una función para mostrar las tareas.
 const mostrarTarea = () => {
-  // Limpiamos el contenido anterior de la lista de tareas.
   listaTareas.innerHTML = "";
-
-  // Creamos la estructura de la tabla con su encabezado.
   listaTareas.innerHTML = `
     <table>
       <tr>
@@ -41,14 +32,9 @@ const mostrarTarea = () => {
       </tr>
     </table>
   `;
-
-  // Obtenemos una referencia a la tabla recién creada.
   const tabla = listaTareas.querySelector('table');
-
-  // Iteramos sobre cada tarea y la añadimos a la tabla.
   for (let i = 0; i < tareas.length; i++) {
     const tarea = tareas[i];
-    // Añadimos una fila para cada tarea.
     tabla.innerHTML += `
       <tr>
         <td>${tarea.id}</td>
@@ -59,48 +45,38 @@ const mostrarTarea = () => {
       </tr>
     `;
   }
-
-  // Actualizamos el resumen de tareas.
   actualizarTarea();
 }
 
-// Función para eliminar una tarea.
+//se crea una función para eliminar una tarea por el id.
 const eliminarTarea = (id) => {
-  // Encontramos el índice de la tarea con el ID proporcionado.
   const indice = tareas.findIndex(tarea => tarea.id === id);
-  // Si se encuentra la tarea, se elimina del array.
   if (indice !== -1) {
     tareas.splice(indice, 1);
-    // Mostramos nuevamente las tareas actualizadas.
-    mostrarTarea();
-  } 
-}
-
-// Función para actualizar el resumen de tareas.
-const actualizarTarea = () => {
-  // Actualizamos el total de tareas.
-  totalTareas.textContent = tareas.length;
-
-  // Contamos las tareas completadas.
-  const tareasCompletadasCount = tareas.filter(tarea => tarea.completada).length;
-  tareasCompletadas.textContent = tareasCompletadasCount;
-};
-
-// Función para actualizar el estado de completado de una tarea.
-const actualizarEstado = (id, completada) => {
-  // Encontramos la tarea en el array de tareas.
-  const tarea = tareas.find(tarea => tarea.id === id);
-  if (tarea) {
-    // Actualizamos el estado de completado de la tarea.
-    tarea.completada = completada;
-    // Mostramos las tareas actualizadas.
     mostrarTarea();
   }
 }
 
-// Escuchamos el evento 'click' en el botón y llamamos a la función agregarTarea.
-boton.addEventListener('click', agregarTarea);
+// se crea una función para actualizar el resumen de tareas.
+const actualizarTarea = () => {
+  // Actualiza el total de tareas.
+  totalTareas.innerHTML = tareas.length;
 
-// Mostramos las tareas iniciales al cargar la página.
+  // se cuentan las tareas completadas.
+  const tareasCompletadasCount = tareas.filter(tarea => tarea.completada).length;
+  tareasCompletadas.innerHTML = tareasCompletadasCount;
+};
+
+// se crea una función para actualizar el estado  al completar una tarea con el checkbox.
+const actualizarEstado = (id, completada) => {
+  const tarea = tareas.find(tarea => tarea.id === id);
+  if (tarea) {
+    tarea.completada = completada;
+    console.log(tarea);
+    mostrarTarea();
+  }
+}
+
+boton.addEventListener('click', agregarTarea);
 mostrarTarea();
 
